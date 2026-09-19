@@ -86,3 +86,33 @@ header {
 .current-time { font-size: 3em; font-weight: bold; color: var(--primary); margin: 10px 0; }
 .bell-countdown { font-size: 1.2em; font-weight: bold; color: #e74c3c; }
 .next-lesson { color: #888; font-size: 0.9em; }
+
+/* Журнал отсутствующих */
+.attendance-widget {
+    display: flex;
+    flex-direction: column;
+}
+.student-list {
+    max-height: 200px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    text-align: left;
+}
+.student-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+}
+[data-theme="dark"] .student-item {
+    border-bottom: 1px solid #444;
+}
+.attendance-widget button {
+    padding: 10px;
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
