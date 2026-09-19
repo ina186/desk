@@ -18,7 +18,7 @@
         </div>
     </div>
 
-    <!-- Основной рабочий стол (Скрыт до ввода пароля) -->
+    <!-- Основной рабочий стол -->
     <div id="dashboard" style="display: none;">
         <header>
             <h1>Панель Учителя</h1>
@@ -26,7 +26,7 @@
         </header>
         
         <main class="grid-container">
-            <!-- Виджет: Прямой эфир (Таймер и уроки) -->
+            <!-- Виджет: Прямой эфир -->
             <div class="widget timer-widget">
                 <h3>Прямой эфир</h3>
                 <div class="current-time" id="clock">00:00</div>
@@ -37,22 +37,26 @@
                 </div>
             </div>
 
-            <!-- Заглушки для завтрашних виджетов -->
-<div class="widget attendance-widget">
-    <h3>Журнал отсутствующих</h3>
-    <div class="student-list" id="student-list">
-        <!-- Сюда скриптом добавятся ученики -->
-    </div>
-    <button onclick="saveAttendance()">Отметить отсутствующих</button>
-    <p id="attendance-status" style="display:none; color: green; margin-top: 10px;"></p>
-</div>
+            <!-- Виджет: Журнал отсутствующих -->
+            <div class="widget attendance-widget">
+                <h3>Журнал отсутствующих</h3>
+                <div class="student-list" id="student-list">
+                    <!-- Сюда скриптом добавятся ученики -->
+                </div>
+                <button onclick="saveAttendance()">Отметить отсутствующих</button>
+                <p id="attendance-status" style="display:none; color: green; margin-top: 10px;"></p>
+            </div>
+
+            <!-- Заглушка: Журнал оценок -->
             <div class="widget placeholder">
                 <h3>Журнал оценок</h3>
-                <p>Появится здесь в субботу</p>
+                <p>Появится здесь позже</p>
             </div>
+
+            <!-- Заглушка: Домашнее задание -->
             <div class="widget placeholder">
                 <h3>Домашнее задание</h3>
-                <p>Появится здесь в воскресенье</p>
+                <p>Появится здесь позже</p>
             </div>
         </main>
     </div>
