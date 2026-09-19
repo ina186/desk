@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Панель Учителя</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Экран блокировки -->
+    <div id="login-screen">
+        <div class="login-box">
+            <h2>Доступ закрыт</h2>
+            <input type="password" id="password-input" placeholder="Введите пароль">
+            <button onclick="checkPassword()">Войти</button>
+            <p id="error-msg" style="color: red; display: none;">Неверный пароль!</p>
+        </div>
+    </div>
+
+    <!-- Основной рабочий стол (Скрыт до ввода пароля) -->
+    <div id="dashboard" style="display: none;">
+        <header>
+            <h1>Панель Учителя</h1>
+            <button onclick="toggleTheme()" class="theme-btn">🌙 Тема</button>
+        </header>
+        
+        <main class="grid-container">
+            <!-- Виджет: Прямой эфир (Таймер и уроки) -->
+            <div class="widget timer-widget">
+                <h3>Прямой эфир</h3>
+                <div class="current-time" id="clock">00:00</div>
+                <div class="lesson-info">
+                    <p>Сейчас: <strong id="current-lesson">-</strong></p>
+                    <p class="bell-countdown">До звонка: <span id="time-left">--:--</span></p>
+                    <p class="next-lesson">Далее: <span id="next-lesson">-</span></p>
+                </div>
+            </div>
+
+            <!-- Заглушки для завтрашних виджетов -->
+            <div class="widget placeholder">
+                <h3>Журнал отсутствующих</h3>
+                <p>Появится здесь в субботу</p>
+            </div>
+            <div class="widget placeholder">
+                <h3>Журнал оценок</h3>
+                <p>Появится здесь в субботу</p>
+            </div>
+            <div class="widget placeholder">
+                <h3>Домашнее задание</h3>
+                <p>Появится здесь в воскресенье</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
