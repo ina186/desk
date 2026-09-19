@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Патронажка - Список</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body style="padding: 20px;">
+    
+    <div style="max-width: 600px; margin: 0 auto; background: var(--widget-bg); padding: 30px; border-radius: 12px; box-shadow: var(--shadow);">
+        
+        <!-- Кнопка Назад -->
+        <a href="index.html" style="text-decoration: none; color: var(--primary); font-size: 1.1em; font-weight: bold;">&larr; Назад на рабочий стол</a>
+        
+        <h2 style="margin-top: 25px;">Журнал отсутствующих</h2>
+        
+        <!-- Список учеников -->
+        <div id="student-list" style="margin-bottom: 20px; border-top: 1px solid #eee; padding-top: 10px;">
+            <!-- Сюда скриптом добавятся ученики -->
+        </div>
+        
+        <button onclick="saveAttendance()" style="width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1.1em;">Сохранить отсутствующих</button>
+        
+        <!-- Кнопки Excel (появятся после сохранения) -->
+        <div id="patronage-actions" style="display: none; margin-top: 25px; text-align: center; padding-top: 20px; border-top: 1px solid #eee;">
+            <p id="attendance-status" style="font-weight: bold; font-size: 1.2em; margin-bottom: 15px;"></p>
+            <div style="display: flex; justify-content: center; gap: 20px;">
+                <button onclick="copyForExcel()" class="icon-btn" title="Скопировать для таблицы" style="display: flex; align-items: center; gap: 10px;">📋 Скопировать</button>
+                <a href="https://cloud.mail.ru/public/RaBf/yLkaMHw4H" target="_blank" class="icon-btn" title="Открыть школьный журнал" style="display: flex; align-items: center; gap: 10px;">📗 В Excel</a>
+            </div>
+            <p style="font-size: 0.9em; color: #888; margin-top: 15px;">Нажмите "Скопировать", перейдите в Excel, выделите ячейку "3 В" и нажмите Вставить (Ctrl+V)</p>
+        </div>
+    </div>
+
+    <script src="patronage.js"></script>
+</body>
+</html>
