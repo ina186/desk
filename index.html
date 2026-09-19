@@ -38,10 +38,14 @@
             </div>
 
             <!-- Заглушки для завтрашних виджетов -->
-            <div class="widget placeholder">
-                <h3>Журнал отсутствующих</h3>
-                <p>Появится здесь в субботу</p>
-            </div>
+<div class="widget attendance-widget">
+    <h3>Журнал отсутствующих</h3>
+    <div class="student-list" id="student-list">
+        <!-- Сюда скриптом добавятся ученики -->
+    </div>
+    <button onclick="saveAttendance()">Отметить отсутствующих</button>
+    <p id="attendance-status" style="display:none; color: green; margin-top: 10px;"></p>
+</div>
             <div class="widget placeholder">
                 <h3>Журнал оценок</h3>
                 <p>Появится здесь в субботу</p>
