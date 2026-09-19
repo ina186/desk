@@ -1,5 +1,5 @@
 // --- 1. АВТОРИЗАЦИЯ ---
-const SECRET_PASSWORD = "123"; // <-- Поменяйте пароль здесь!
+const SECRET_PASSWORD = "123";
 
 function checkPassword() {
     const input = document.getElementById('password-input').value;
@@ -19,7 +19,6 @@ function toggleTheme() {
 }
 
 // --- 3. ВИДЖЕТ "ПРЯМОЙ ЭФИР" (РАСПИСАНИЕ ЗВОНКОВ) ---
-// Настройте свое расписание звонков здесь (формат 'ЧЧ:ММ')
 const schedule = [
     { name: "1 урок", start: "08:30", end: "09:15" },
     { name: "Перемена", start: "09:15", end: "09:30" },
@@ -30,11 +29,9 @@ const schedule = [
 
 function updateClock() {
     const now = new Date();
-    // Часы
     const timeString = now.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     document.getElementById('clock').textContent = timeString;
 
-    // Вычисление текущего урока
     let currentPhase = "Уроки закончились (или еще не начались)";
     let nextPhase = "-";
     let timeLeft = "--:--";
@@ -51,7 +48,6 @@ function updateClock() {
             currentPhase = schedule[i].name;
             nextPhase = schedule[i+1] ? schedule[i+1].name : "Домой!";
             
-            // Считаем сколько осталось до звонка
             let diffMins = endMins - currentMinutes - 1;
             let diffSecs = 59 - now.getSeconds();
             timeLeft = `${diffMins.toString().padStart(2, '0')}:${diffSecs.toString().padStart(2, '0')}`;
@@ -64,6 +60,71 @@ function updateClock() {
     document.getElementById('next-lesson').textContent = nextPhase;
 }
 
-// Запускаем часы каждую секунду
 setInterval(updateClock, 1000);
 updateClock();
+
+// --- 4. БАЗА ДАННЫХ И ЖУРНАЛ ОТСУТСТВУЮЩИХ ---
+// Ваша личная ссылка на базу данных уже здесь!
+const DB_URL = "https://script.google.com/macros/s/AKfycbzHWH_OcudJqm5-23H48fQjd4xNHZLhd1gGRkPyaxOqXellHUXRV8yHpe9FVmNPfWO6/exec";
+
+// Список вашего класса (можно менять фамилии)
+const students = ["Алексеев Иван", "Борисова Анна", "Васильев Петр", "Григорьева Мария"];
+
+function renderStudentList() {
+    const listContainer = document.getElementById('student-list');
+    if (!listContainer) return; 
+    listContainer.innerHTML = '';
+    
+    students.forEach(student => {
+        const div = document.createElement('div');
+        div.className = 'student-item';
+        div.innerHTML = `
+            <span>${student}</span>
+            <input type="checkbox" class="absent-checkbox" value="${student}">
+        `;
+        listContainer.appendChild(div);
+    });
+}
+
+function saveAttendance() {
+    const checkboxes = document.querySelectorAll('.absent-checkbox:checked');
+    const absentStudents = Array.from(checkboxes).map(cb => cb.value);
+    const statusText = document.getElementById('attendance-status');
+    
+    if (absentStudents.length === 0) {
+        statusText.style.display = 'block';
+        statusText.style.color = '#333';
+        statusText.textContent = "Все присутствуют!";
+        setTimeout(() => statusText.style.display = 'none', 3000);
+        return;
+    }
+
+    statusText.style.display = 'block';
+    statusText.textContent = 'Отправка в базу...';
+    statusText.style.color = '#e74c3c';
+
+    const dateStr = new Date().toLocaleDateString('ru-RU');
+    const data = [dateStr, absentStudents.join(', ')];
+
+    fetch(DB_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: 'sheetName=Attendance&data=' + encodeURIComponent(JSON.stringify(data))
+    })
+    .then(response => response.text())
+    .then(result => {
+        statusText.textContent = 'Успешно сохранено!';
+        statusText.style.color = 'green';
+        setTimeout(() => {
+            statusText.style.display = 'none';
+            checkboxes.forEach(cb => cb.checked = false);
+        }, 3000);
+    })
+    .catch(error => {
+        statusText.textContent = 'Ошибка сохранения!';
+        console.error(error);
+    });
+}
+
+// Запускаем отрисовку списка
+renderStudentList();
