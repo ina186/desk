@@ -72,19 +72,20 @@ function saveAttendance() {
 
     clipboardText = rowData.join('\t');
 
+    // Добавили border-collapse для единой сетки и border: 1px solid black для каждой ячейки
     clipboardHtml = `
-        <table>
+        <table style="border-collapse: collapse;">
             <tr>
-                <td style="font-family: 'Liberation Sans', sans-serif; font-size: 16pt; font-weight: bold; text-align: left;">${rowData[0]}</td>
-                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[1]}</td>
-                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[2]}</td>
-                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[3]}</td>
-                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[4]}</td>
-                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[5]}</td>
-                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[6]}</td>
-                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[7]}</td>
-                <td style="font-family: 'Calibri', sans-serif; font-size: 16pt; font-weight: normal; text-align: left;">${rowData[8]}</td>
-                <td style="font-family: 'Calibri', sans-serif; font-size: 16pt; font-weight: normal; text-align: right;">${rowData[9]}</td>
+                <td style="border: 1px solid black; font-family: 'Liberation Sans', sans-serif; font-size: 16pt; font-weight: bold; text-align: left;">${rowData[0]}</td>
+                <td style="border: 1px solid black; font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[1]}</td>
+                <td style="border: 1px solid black; font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[2]}</td>
+                <td style="border: 1px solid black; font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[3]}</td>
+                <td style="border: 1px solid black; font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[4]}</td>
+                <td style="border: 1px solid black; font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[5]}</td>
+                <td style="border: 1px solid black; font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[6]}</td>
+                <td style="border: 1px solid black; font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[7]}</td>
+                <td style="border: 1px solid black; font-family: 'Calibri', sans-serif; font-size: 16pt; font-weight: normal; text-align: left;">${rowData[8]}</td>
+                <td style="border: 1px solid black; font-family: 'Calibri', sans-serif; font-size: 16pt; font-weight: normal; text-align: right;">${rowData[9]}</td>
             </tr>
         </table>
     `;
