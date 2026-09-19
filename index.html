@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель Учителя</title>
+    <title>Навигатор урока</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,7 +26,7 @@
         </header>
         
         <main class="grid-container">
-            <!-- Виджет: Прямой эфир -->
+            <!-- Виджет: Прямой эфир (Часы) -->
             <div class="widget timer-widget">
                 <h3>Прямой эфир</h3>
                 <div class="current-time" id="clock">00:00</div>
@@ -37,14 +37,11 @@
                 </div>
             </div>
 
-            <!-- Виджет: Журнал отсутствующих -->
-            <div class="widget attendance-widget">
-                <h3>Журнал отсутствующих</h3>
-                <div class="student-list" id="student-list">
-                    <!-- Сюда скриптом добавятся ученики -->
-                </div>
-                <button onclick="saveAttendance()">Отметить отсутствующих</button>
-                <p id="attendance-status" style="display:none; color: green; margin-top: 10px;"></p>
+            <!-- Виджет: Кнопка открытия Патронажки -->
+            <div class="widget" style="text-align: center; display: flex; flex-direction: column; justify-content: center;">
+                <h3>Патронажка</h3>
+                <p style="margin-bottom: 15px; color: #666; font-size: 0.9em;">Журнал отсутствующих и обедов</p>
+                <button onclick="openModal('patronage-modal')" style="padding: 15px; font-size: 1.2em; cursor: pointer; background: var(--primary); color: white; border: none; border-radius: 8px;">📋 Открыть список</button>
             </div>
 
             <!-- Заглушка: Журнал оценок -->
@@ -59,6 +56,28 @@
                 <p>Появится здесь позже</p>
             </div>
         </main>
+    </div>
+
+    <!-- ВСПЛЫВАЮЩЕЕ ОКНО: ПАТРОНАЖКА -->
+    <div id="patronage-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('patronage-modal')">&times;</span>
+            <h2>Патронажка</h2>
+            <div class="student-list" id="student-list">
+                <!-- Сюда скриптом добавятся ученики -->
+            </div>
+            <button onclick="saveAttendance()" class="action-btn">Сохранить отсутствующих</button>
+            
+            <!-- Блок с иконками (появляется после сохранения) -->
+            <div id="patronage-actions" style="display: none; margin-top: 15px; text-align: center;">
+                <p id="attendance-status" style="font-weight: bold; margin-bottom: 15px;"></p>
+                <div style="display: flex; justify-content: center; gap: 15px;">
+                    <button onclick="copyForExcel()" class="icon-btn" title="Скопировать для таблицы">📋</button>
+                    <a href="https://cloud.mail.ru/public/RaBf/yLkaMHw4H" target="_blank" class="icon-btn" title="Открыть школьный журнал">📗</a>
+                </div>
+                <p style="font-size: 0.8em; color: #888; margin-top: 10px;">Нажмите 📋, затем вставьте в колонку "Класс"</p>
+            </div>
+        </div>
     </div>
 
     <script src="app.js"></script>
