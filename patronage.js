@@ -34,6 +34,7 @@ function renderStudentList() {
 }
 
 let clipboardText = ""; 
+let clipboardHtml = ""; 
 
 function saveAttendance() {
     const checkboxes = document.querySelectorAll('.absent-checkbox:checked');
@@ -69,8 +70,26 @@ function saveAttendance() {
         statusText.style.color = 'green';
     }
 
-    // Собираем чистый текст через табуляцию (разделитель колонок)
+    // Текстовый вариант на случай сбоев
     clipboardText = rowData.join('\t');
+
+    // Жестко заданный HTML по вашим требованиям
+    clipboardHtml = `
+        <table>
+            <tr>
+                <td style="font-family: 'Liberation Sans', sans-serif; font-size: 18pt; font-weight: bold; text-align: left;">${rowData[0]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[1]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[2]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[3]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[4]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[5]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[6]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[7]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 16pt; font-weight: normal; text-align: left;">${rowData[8]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 16pt; font-weight: normal; text-align: right;">${rowData[9]}</td>
+            </tr>
+        </table>
+    `;
 
     const dateStr = new Date().toLocaleDateString('ru-RU');
     const data = [dateStr, absentNames.join(', ')];
@@ -81,21 +100,33 @@ function saveAttendance() {
     }).catch(() => console.log('Фоновое сохранение'));
 }
 
-// Копируем чистый текст
+// Записываем HTML с форматом в буфер обмена
 function copyForExcel() {
-    navigator.clipboard.writeText(clipboardText).then(() => {
-        const btn = document.querySelector('.icon-btn');
-        if (btn) {
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '✅ Готово!';
-            btn.style.background = '#d4edda';
-            
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.style.background = '#f0f0f0';
-            }, 2000);
-        }
-    });
+    if (navigator.clipboard && window.ClipboardItem) {
+        const blobHtml = new Blob([clipboardHtml], { type: 'text/html' });
+        const blobText = new Blob([clipboardText], { type: 'text/plain' });
+        const data = [new ClipboardItem({
+            'text/html': blobHtml,
+            'text/plain': blobText
+        })];
+        navigator.clipboard.write(data).then(showSuccessBtn);
+    } else {
+        navigator.clipboard.writeText(clipboardText).then(showSuccessBtn);
+    }
+}
+
+function showSuccessBtn() {
+    const btn = document.querySelector('.icon-btn');
+    if (btn) {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✅ Готово!';
+        btn.style.background = '#d4edda';
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = '#f0f0f0';
+        }, 2000);
+    }
 }
 
 renderStudentList();
