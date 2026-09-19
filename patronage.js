@@ -19,7 +19,6 @@ function renderStudentList() {
     
     students.forEach(student => {
         const div = document.createElement('div');
-        // Делаем строки крупными и удобными
         div.style.display = 'flex';
         div.style.justifyContent = 'space-between';
         div.style.alignItems = 'center';
@@ -34,7 +33,9 @@ function renderStudentList() {
     });
 }
 
-let lastAbsentString = ""; 
+// Теперь мы храним два вида данных: для простых таблиц и с супер-форматированием для Mail.ru
+let clipboardText = ""; 
+let clipboardHtml = ""; 
 
 function saveAttendance() {
     const checkboxes = document.querySelectorAll('.absent-checkbox:checked');
@@ -49,31 +50,88 @@ function saveAttendance() {
     const lunchCount = totalStudents - count; 
     const namesStr = absentNames.join(', ');
 
+    // Собираем данные в массив
+    const rowData = [
+        CLASS_NAME,                                // A
+        totalStudents,                             // B
+        count,                                     // C
+        count,                                     // D
+        0,                                         // E
+        0,                                         // F
+        0,                                         // G
+        0,                                         // H
+        count === 0 ? "---" : namesStr,            // I
+        lunchCount                                 // J
+    ];
+
     if (count === 0) {
-        lastAbsentString = `${CLASS_NAME}\t${totalStudents}\t0\t0\t\t\t\t\t\t\t${totalStudents}`; 
         statusText.textContent = "Все присутствуют! 🌟";
         statusText.style.color = '#333';
     } else {
-        lastAbsentString = `${CLASS_NAME}\t${totalStudents}\t${count}\t${count}\t\t\t\t\t${namesStr}\t\t${lunchCount}`;
         statusText.textContent = 'Данные готовы для Excel!';
         statusText.style.color = 'green';
     }
 
-    // Отправка в базу для истории
+    // 1. Простой текст (на всякий случай)
+    clipboardText = rowData.join('\t');
+
+    // 2. МАГИЯ ФОРМАТИРОВАНИЯ: Невидимая HTML-таблица со шрифтами из ваших скриншотов
+    clipboardHtml = `
+        <table>
+            <tr>
+                <td style="font-family: 'Liberation Sans', sans-serif; font-size: 16pt; font-weight: bold;">${rowData[0]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt;">${rowData[1]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt;">${rowData[2]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt;">${rowData[3]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt;">${rowData[4]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt;">${rowData[5]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt;">${rowData[6]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt;">${rowData[7]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 11pt;">${rowData[8]}</td>
+                <td style="font-family: 'Calibri', sans-serif; font-size: 16pt;">${rowData[9]}</td>
+            </tr>
+        </table>
+    `;
+
     const dateStr = new Date().toLocaleDateString('ru-RU');
     const data = [dateStr, absentNames.join(', ')];
     fetch(DB_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: 'sheetName=Attendance&data=' + encodeURIComponent(JSON.stringify(data))
-    });
+    }).catch(() => console.log('Фоновое сохранение'));
 }
 
+// Умное копирование с форматированием
 function copyForExcel() {
-    navigator.clipboard.writeText(lastAbsentString).then(() => {
-        alert("Скопировано!\nТеперь нажмите кнопку «В Excel», выберите ячейку «3 В» и нажмите Вставить (Ctrl+V)");
-    });
+    if (navigator.clipboard && window.ClipboardItem) {
+        // Копируем богатый текст с нужными шрифтами
+        const blobHtml = new Blob([clipboardHtml], { type: 'text/html' });
+        const blobText = new Blob([clipboardText], { type: 'text/plain' });
+        const data = [new ClipboardItem({
+            'text/html': blobHtml,
+            'text/plain': blobText
+        })];
+        navigator.clipboard.write(data).then(showSuccessBtn);
+    } else {
+        // Для старых браузеров
+        navigator.clipboard.writeText(clipboardText).then(showSuccessBtn);
+    }
 }
 
-// Рисуем список при открытии страницы
+// Красивое переключение кнопки без всплывающих окон
+function showSuccessBtn() {
+    const btn = document.querySelector('.icon-btn');
+    if (btn) {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✅ Готово!';
+        btn.style.background = '#d4edda';
+        
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.style.background = '#f0f0f0';
+        }, 2000);
+    }
+}
+
 renderStudentList();
