@@ -70,14 +70,12 @@ function saveAttendance() {
         statusText.style.color = 'green';
     }
 
-    // Текстовый вариант на случай сбоев
     clipboardText = rowData.join('\t');
 
-    // Жестко заданный HTML по вашим требованиям
     clipboardHtml = `
         <table>
             <tr>
-                <td style="font-family: 'Liberation Sans', sans-serif; font-size: 18pt; font-weight: bold; text-align: left;">${rowData[0]}</td>
+                <td style="font-family: 'Liberation Sans', sans-serif; font-size: 16pt; font-weight: bold; text-align: left;">${rowData[0]}</td>
                 <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[1]}</td>
                 <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[2]}</td>
                 <td style="font-family: 'Calibri', sans-serif; font-size: 11pt; font-weight: normal; text-align: right;">${rowData[3]}</td>
@@ -100,7 +98,6 @@ function saveAttendance() {
     }).catch(() => console.log('Фоновое сохранение'));
 }
 
-// Записываем HTML с форматом в буфер обмена
 function copyForExcel() {
     if (navigator.clipboard && window.ClipboardItem) {
         const blobHtml = new Blob([clipboardHtml], { type: 'text/html' });
